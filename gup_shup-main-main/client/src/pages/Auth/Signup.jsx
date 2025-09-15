@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { MdOutlinePassword } from "react-icons/md";
 import { useDispatch } from "react-redux";
@@ -6,9 +6,12 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { registerUserThunk } from "../../store/slice/user/userThunk";
 import { toast } from "react-hot-toast";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 function Signup() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.userReducer);
+
   const [signUpData, setSignUpData] = useState({
     fullName: "",
     username: "",
@@ -24,6 +27,14 @@ function Signup() {
       [name]: value,
     }));
   };
+
+
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
 
 

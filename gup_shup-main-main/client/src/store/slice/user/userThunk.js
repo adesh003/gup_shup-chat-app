@@ -43,6 +43,7 @@ export const registerUserThunk = createAsyncThunk(
     }
   }
 );
+//Logout
 export const logoutUserThunk = createAsyncThunk(
   "user/logout",
   async (_,{rejectWithValue}) => {
@@ -58,3 +59,40 @@ export const logoutUserThunk = createAsyncThunk(
     }
   }
 );
+
+//Get User Profile
+export const getUserProfileThunk = createAsyncThunk(
+  "user/getUserProfile",
+  async (_,{rejectWithValue}) => {
+    try {
+      const response = await axiosInstance.get("/user/profile");
+   
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch profile!";
+      // toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+
+//Get Other Users
+
+export const getOtherUsersThunk = createAsyncThunk(
+  "user/getOtherUser",
+  async (_,{rejectWithValue}) => {
+    try {
+      const response = await axiosInstance.get("/user/getOtherUser");
+   
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch other users!";
+      // toast.error(errorMessage);
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+

@@ -4,21 +4,29 @@ import User from "./User";
 import { useDispatch } from "react-redux";
 import { logoutUserThunk } from "../../store/slice/user/userThunk";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const UserSideBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
+  const{otherUsers} = useSelector(state => state.userReducer)
 
-const {userProfile} = useSelector((state) => state.user)
+// const {userProfile} = useSelector((state) => state.userReducer)
+
+
   const handleLogoutBtn = () => {
     dispatch(logoutUserThunk())
     navigate("/login")
   }
+
+
+
+  
   return (
-    <div className="max-w-[17rem] w-full h-screen flex flex-col">
+    <div className="max-w-[17rem] w-full h-screen flex flex-col gap-1">
       <div>
-        <h1 className="bg-black mx-3 px-2 py-1 rounded-lg text-[#5754E8] text-xl font-semibold ">
-          gup shap
+        <h1 className="bg-black mx-3 px-8 py-1 rounded-lg text-[#5754E8] text-xl font-semibold ">
+          CHATI-FY
         </h1>
       </div>
 
@@ -30,11 +38,13 @@ const {userProfile} = useSelector((state) => state.user)
       </div>
 
       <div className="h-full overflow-y-auto">
-        <User />
-        <User />
-        <User />
-        <User />
-
+        {otherUsers?.map((userDetails)=>{
+          // console.log(userDetails)
+          return(
+            <User key={userDetails._id} userDetails={userDetails}/>
+          )
+        })}
+    
       </div>
       <div className=" flex items-center justify-between p-3">
         <div className="avatar">

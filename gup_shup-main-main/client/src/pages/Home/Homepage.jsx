@@ -1,6 +1,6 @@
 import React from 'react'
-import UserSideBar from './UserSideBar'
 import MessageContainer from './MessageContainer'
+import UserSideBar from './UserSidebar'
 
 function Homepage() {
   return (

@@ -1,6 +1,7 @@
 import React from 'react'
 
-const Message = () => {
+const Message = ({messageDetails}) => {
+  console.log("messageDetails",messageDetails)
   return (
     <div className="chat chat-start">
     <div className="chat-image avatar">
@@ -12,11 +13,11 @@ const Message = () => {
       </div>
     </div>
     <div className="chat-header">
-      Obi-Wan Kenobi
-      <time className="text-xs opacity-50">12:45</time>
+    
+      <time className="text-xs opacity-50">{messageDetails?.createdAt?.slice(11, 19)}</time>
     </div>
-    <div className="chat-bubble">You were the Chosen One!</div>
-    <div className="chat-footer opacity-50">Delivered</div>
+    <div className="chat-bubble">{messageDetails?.message}</div>
+    {/* <div className="chat-footer opacity-50">Delivered</div> */}
   </div>
   )
 }

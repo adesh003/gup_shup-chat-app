@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { MdOutlinePassword, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { CiUser } from "react-icons/ci";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginUserThunk } from "../../store/slice/user/userThunk";
+import { useSelector } from "react-redux";
 
 const Login = () => {
   const dispatch = useDispatch();
 const navigate = useNavigate();
+
+const { isAuthenticated } = useSelector((state) => state.userReducer);
+
+useEffect(() => {
+  if (isAuthenticated) {
+    navigate("/");
+  }
+}, [isAuthenticated]);
+
+
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",   
