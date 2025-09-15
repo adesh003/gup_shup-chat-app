@@ -1,8 +1,8 @@
-import React from "react";
+import React, { use, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
 import User from "./User";
 import { useDispatch } from "react-redux";
-import { logoutUserThunk } from "../../store/slice/user/userThunk";
+import { getOtherUsersThunk, logoutUserThunk } from "../../store/slice/user/userThunk";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -11,8 +11,13 @@ const UserSideBar = () => {
   const navigate = useNavigate()
   const{otherUsers} = useSelector(state => state.userReducer)
 
-// const {userProfile} = useSelector((state) => state.userReducer)
+const {userProfile} = useSelector((state) => state.userReducer)
 
+
+
+useEffect(() => {
+  dispatch(getOtherUsersThunk())
+}, [])
 
   const handleLogoutBtn = () => {
     dispatch(logoutUserThunk())
@@ -46,11 +51,14 @@ const UserSideBar = () => {
         })}
     
       </div>
-      <div className=" flex items-center justify-between p-3">
+      <div className=" border-t border-gray-400 pt-1 flex items-center justify-between p-3">
         <div className="avatar">
           <div className="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
-            <img src="https://img.daisyui.com/images/profile/demo/spiderperson@192.webp" />
+            <img src={userProfile?.avatar} />
           </div>
+          <p className="ml-4 text-sm font-semibold text-white flex items-center justify-center ">
+         {userProfile?.username}
+         </p> 
         </div>
 
         <button

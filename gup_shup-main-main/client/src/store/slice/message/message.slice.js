@@ -19,13 +19,13 @@ export const messageSlice = createSlice({
             })
             .addCase(sendMessageThunk.fulfilled, (state, action) => {
                 state.buttonLoading = false;
-                console.log(action.payload)
-                // const newMessage = action.payload?.responseData?.newMessage;
+                console.log(action.payload?.responseData)
+                const newMessage = action.payload?.responseData?.newMessage;
 
-                // if (newMessage) {
-                //     // Agar pehle se array hai to push kar do
-                //     state.messages.push(newMessage);
-                // }
+                if (newMessage) {
+                    // Agar pehle se array hai to push kar do
+                    state.messages.push(newMessage);
+                }
             })
             .addCase(sendMessageThunk.rejected, (state) => {
                 state.buttonLoading = false;
