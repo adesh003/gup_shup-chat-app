@@ -1,0 +1,68 @@
+import { response } from "express";
+import { asyncHandler } from "../utilities/asyncHandler.utility.js";
+import { errorHandler } from "../utilities/errorHandler.utility.js";
+import Message from "../models/messageModel.js";
+import Conversation from "../models/conversationModel.js";
+
+
+export const sendMessage = asyncHandler(async (req, res, next) => {
+
+    const senderId = req.user._id;
+    const recieverId = req.params.recieverId;
+    const message = req.body.message;
+
+    if (!senderId || !recieverId || !message) {
+        return next(new errorHandler("All feild are required", 400));
+    }
+    let conversation = await Conversation.findOne({
+        participants: { $all: [senderId, recieverId] }
+    })
+    if (!conversation) {
+        conversation = await Conversation.create({
+            participants: [senderId, recieverId]
+        })
+    }
+    const newMessage = await Message.create({
+        senderId,
+        recieverId,
+        message
+    })
+    if (conversation) {
+        conversation.messages.push(newMessage._id)
+        await conversation.save()
+    }
+    // sockit.io
+
+    res.status(200).json({
+        success: true,
+        responseData: {
+            newMessage,
+            conversation
+        }
+    })
+    //   res.send("hello regsited");
+});
+
+export const getMessage = asyncHandler(async (req, res, next) => {
+    const myId = req.user._id;
+    const otherParticipantId = req.params.otherParticipantId;
+
+    if (!myId || !otherParticipantId) {
+        return next(new errorHandler("All feild are required", 400));
+    }
+    let conversation = await Conversation.findOne({
+        participants: { $all: [myId, otherParticipantId] }
+    }).populate("messages");
+
+    // if (!conversation) {
+    //     return next(new errorHandler("Conversation not found", 404));
+    // }
+
+
+
+    res.status(200).json({
+        success: true,
+        responseData: conversation
+    })
+
+});
