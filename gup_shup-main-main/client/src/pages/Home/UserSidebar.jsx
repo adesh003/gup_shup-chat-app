@@ -9,7 +9,7 @@ const UserSideBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
-
+const {userProfile} = useSelector((state) => state.user)
   const handleLogoutBtn = () => {
     dispatch(logoutUserThunk())
     navigate("/login")
