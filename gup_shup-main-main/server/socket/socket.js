@@ -2,22 +2,33 @@ import dotenv from "dotenv";
 
 dotenv.config();
 import { Server } from "socket.io";
-import https from "https";
+import http from "http";
 import express from "express";
 
 const app = express();
 
-const server = https.createServer(app)
+const server = http.createServer(app)
 
 
 const io = new Server(server, {
-    cors:{
-        origin:process.env.CLIENT_URL
+    cors: {
+        origin:"http://localhost:5173",
+        credentials:true,
     }
 })
 
+const userSocketMap= {
+    // userId:socketId
+}
 
 io.on("connection", (socket) => {
-    console.log("a user connected" , socket.id);
+    
+    const userId = socket.handshake.query.userId
+    if(!userId) return;
+    userSocketMap[userId] = socket.id
+   
+    io.emit("userOnline", Object.keys(userSocketMap))
 })
+
+
 export {io,app, server}
