@@ -1,6 +1,5 @@
-import dotenv from "dotenv";
+import {app, server, io} from "./socket/socket.js"
 
-dotenv.config();
 
 import express from "express";
 import cookieParser from "cookie-parser";
@@ -10,7 +9,10 @@ import { connectDb } from "./db/connection1.db.js";
 import errorMiddleware from "./middlewares/error.middleware.js";
 import cors from "cors";
 
-const app = express();
+connectDb();
+// const app = express();
+
+
 
 // Middleware
 app.use(cors(
@@ -22,7 +24,6 @@ app.use(cors(
 app.use(express.json());
 app.use(cookieParser());
 
-connectDb();
 
 // Routes
 app.use('/api/v1/user', userRouter);
@@ -31,7 +32,7 @@ app.use(errorMiddleware);
 
 // Start server
 const PORT = process.env.PORT || 8000;
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`🌐 MongoDB URI: ${process.env.MONGODB_URI.split('@')[1]?.split('/')[0] || 'Not configured'}`);
 });
