@@ -1,4 +1,4 @@
-import React, { use, useEffect } from "react";
+import React, { use, useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import User from "./User";
 import { useDispatch } from "react-redux";
@@ -13,7 +13,17 @@ const UserSideBar = () => {
 
 const {userProfile} = useSelector((state) => state.userReducer)
 
+const[searchQuery, setSearchQuery] = useState("")
+const[filteredUsers, setFilteredUsers] = useState([])
 
+useEffect(() => {
+
+
+  const filtered = otherUsers?.filter((user) => {
+    return user?.username?.toLowerCase().includes(searchQuery?.toLowerCase()) || user?.fullName?.toLowerCase().includes(searchQuery?.toLowerCase())
+  })
+  setFilteredUsers(filtered)
+}, [searchQuery])
 
 useEffect(() => {
   dispatch(getOtherUsersThunk())
@@ -38,12 +48,12 @@ useEffect(() => {
       <div className="p-3">
         <label className="input">
           <CiSearch />
-          <input type="search" className="grow" placeholder="Search" />
+          <input onChange={(e)=>setSearchQuery(e.target.value)} type="search" className="grow" placeholder="Search" />
         </label>
       </div>
 
       <div className="h-full overflow-y-auto">
-        {otherUsers?.map((userDetails)=>{
+        {filteredUsers?.map((userDetails)=>{
           // console.log(userDetails)
           return(
             <User key={userDetails._id} userDetails={userDetails}/>

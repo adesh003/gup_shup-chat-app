@@ -28,7 +28,17 @@ io.on("connection", (socket) => {
     userSocketMap[userId] = socket.id
    
     io.emit("userOnline", Object.keys(userSocketMap))
+    
+
+    socket.on("disconnect", () => {
+        delete userSocketMap[userId]
+        io.emit("userOnline", Object.keys(userSocketMap))
+    })
 })
 
+const getSocketId = (userId)=>{
+    return userSocketMap[userId]
+}
 
-export {io,app, server}
+
+export {io,app, server,getSocketId}

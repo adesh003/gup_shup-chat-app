@@ -9,7 +9,12 @@ export const messageSlice = createSlice({
         screenLoading: false,
     },
     reducers: {
-       
+       setNewMessages: (state, action) => {
+        const oldMessages = state.messages ?? [];
+        const newMessages = [...oldMessages, action.payload];
+        state.messages = newMessages;
+        // state.messages.push(action.payload)
+       }
     },
     extraReducers: (builder) => {
         // ---------------- SEND MESSAGE ----------------
@@ -63,6 +68,6 @@ export const messageSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {  } = messageSlice.actions;
+export const { setNewMessages } = messageSlice.actions;
 
 export default messageSlice.reducer;

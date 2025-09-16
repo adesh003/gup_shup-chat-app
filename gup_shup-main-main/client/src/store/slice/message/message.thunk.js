@@ -15,26 +15,26 @@ export const sendMessageThunk = createAsyncThunk(
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Login failed!";
-      return rejectWithValue(errorMessage); 
+      return rejectWithValue(errorMessage);
     }
   }
 );
 export const getMessageThunk = createAsyncThunk(
-    "message/getMessage",
-    async ({ recieverId}, { rejectWithValue }) => {
-      try {
-        console.log('Fetching messages for participant ID:', recieverId);
-        const response = await axiosInstance.get(`/message/getMessage/${recieverId}`);
-        console.log('Messages API response:', response.data.messages);
-        return response.data;
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.message || "Failed to fetch messages!";
-        return rejectWithValue(errorMessage);
-      }
+  "message/getMessage",
+  async ({ recieverId }, { rejectWithValue }) => {
+    try {
+
+      const response = await axiosInstance.get(`/message/getMessage/${recieverId}`);
+
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch messages!";
+      return rejectWithValue(errorMessage);
     }
-  );
-  
+  }
+);
+
 
 
 

@@ -10,7 +10,7 @@ const MessageContainer = () => {
   const dispatch = useDispatch();
   const { selectedUser } = useSelector((state) => state.userReducer);
   const { messages } = useSelector((state) => state.messageReducer)
-  console.log(messages)
+  
   useEffect(() => {
     if (selectedUser?._id) {
       dispatch(getMessageThunk({ recieverId: selectedUser._id }));

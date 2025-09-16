@@ -3,6 +3,7 @@ import { asyncHandler } from "../utilities/asyncHandler.utility.js";
 import { errorHandler } from "../utilities/errorHandler.utility.js";
 import Message from "../models/messageModel.js";
 import Conversation from "../models/conversationModel.js";
+import { getSocketId, io } from "../socket/socket.js";
 
 
 export const sendMessage = asyncHandler(async (req, res, next) => {
@@ -32,6 +33,9 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
         await conversation.save()
     }
     // sockit.io
+
+    const socketId = getSocketId(recieverId)
+    io.to(socketId).emit("newMessage", newMessage)
 
     res.status(200).json({
         success: true,

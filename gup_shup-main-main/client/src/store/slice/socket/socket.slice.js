@@ -6,7 +6,6 @@ export const socketSlice = createSlice({
   initialState: {
    
     socket: null,
-    screenLoading: false,
     userOnline: null,
     
     
@@ -26,7 +25,6 @@ export const socketSlice = createSlice({
          
         },
         setUserOnline: (state, action) => {
-          
           state.userOnline = action.payload
         }
 
