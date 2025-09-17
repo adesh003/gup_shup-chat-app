@@ -1,28 +1,90 @@
+// import React, { useEffect, useState } from "react";
+// import { toast } from "react-hot-toast";
+// import { MdOutlinePassword, MdVisibility, MdVisibilityOff } from "react-icons/md";
+// import { CiUser } from "react-icons/ci";
+// import { useDispatch } from "react-redux";
+// import { Link, useNavigate } from "react-router-dom";
+// import { LoginUserThunk } from "../../store/slice/user/userThunk";
+// import { useSelector } from "react-redux";
+
+// const Login = () => {
+//   const dispatch = useDispatch();
+// const navigate = useNavigate();
+
+// const { isAuthenticated } = useSelector((state) => state.userReducer);
+
+// useEffect(() => {
+//   if (isAuthenticated) {
+//     navigate("/");
+//   }
+// }, [isAuthenticated]);
+
+
+//   const [loginData, setLoginData] = useState({
+//     username: "",
+//     password: "",   
+//   });
+
+//   const [showPassword, setShowPassword] = useState(false);
+
+//   const handleInputChange = (e) => {
+//     const { name, value } = e.target;
+//     setLoginData((prevData) => ({
+//       ...prevData,
+//       [name]: value,
+//     }));
+//   };
+
+//   const handleLoginBtn = async (e) => {
+//     e.preventDefault();
+//     if (!loginData.username || !loginData.password) {
+//       toast.error("Please fill in all fields");
+//       return;
+//     }
+
+//     // toast.loading("Logging in...");
+//     const result = await dispatch(LoginUserThunk({
+//       username: loginData.username,
+//       password: loginData.password,
+//     }));
+
+
+
+//     if (result.meta.requestStatus === "fulfilled") {
+//       toast.dismiss();
+//       toast.success(`Login successful!, ${loginData.username} 🎉`);
+//       // Navigate to home page
+//       navigate("/");
+//     } else {
+//       toast.dismiss();
+//       toast.error("Invalid username or password ");
+//     }
+//   };
+
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { MdOutlinePassword, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { CiUser } from "react-icons/ci";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { LoginUserThunk } from "../../store/slice/user/userThunk";
-import { useSelector } from "react-redux";
+// 👇 STEP 1: Yahan 'getOtherUsersThunk' ko import karein
+import { LoginUserThunk, getOtherUsersThunk } from "../../store/slice/user/userThunk";
 
 const Login = () => {
   const dispatch = useDispatch();
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const { isAuthenticated } = useSelector((state) => state.userReducer);
-
-useEffect(() => {
-  if (isAuthenticated) {
-    navigate("/");
-  }
-}, [isAuthenticated]);
-
+  const { isAuthenticated, otherUsers } = useSelector((state) => state.userReducer);
+  
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   const [loginData, setLoginData] = useState({
     username: "",
-    password: "",   
+    password: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -41,23 +103,22 @@ useEffect(() => {
       toast.error("Please fill in all fields");
       return;
     }
-
-    // toast.loading("Logging in...");
+  
     const result = await dispatch(LoginUserThunk({
       username: loginData.username,
       password: loginData.password,
     }));
-
-
-
+  
     if (result.meta.requestStatus === "fulfilled") {
+      // 👇 Bas yahan se (otherUsers) hata dein
+      dispatch(getOtherUsersThunk());
+  
       toast.dismiss();
       toast.success(`Login successful!, ${loginData.username} 🎉`);
-      // Navigate to home page
-      navigate("/");
+      navigate("/"); 
     } else {
       toast.dismiss();
-      toast.error("Invalid username or password ");
+      toast.error(result.payload || "Invalid username or password");
     }
   };
 
